@@ -15,7 +15,11 @@ screen.setOnScreen()
 running = True                      # Variável de looping
 while running:                      # looping
     for e in pygame.event.get():
-        if e.type == pygame.MOUSEBUTTONDOWN:
+        if e.type == pygame.MOUSEBUTTONDOWN and not screen.dead:
+            screen.update()
+            screen.setOnScreen()
+        if pygame.key.get_pressed()[pygame.K_SPACE] and screen.dead:
+            screen.restart()
             screen.update()
             screen.setOnScreen()
         if pygame.key.get_pressed()[pygame.K_ESCAPE] or e.type == QUIT:

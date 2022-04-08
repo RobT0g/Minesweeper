@@ -20,6 +20,8 @@ class Grid:
     def openTile(self, tile) -> None:
         try:
             self.opened[tile[0]][tile[1]] = 1
+            if self.grid[tile[0]][tile[1]] == -1:
+                return 0
             if self.numbers[tile[0]][tile[1]] == 0:
                 free = [[tile[0]+i[0], tile[1]+i[1]] if (tile[0]+i[0] in range(self.size[0])) and (tile[1]+i[1] in range(self.size[1]))
                     and (self.opened[tile[0]+i[0]][tile[1]+i[1]] == 0) else [] for i in [[0, 1], [1, 0], [0, -1], [-1, 0]]]
