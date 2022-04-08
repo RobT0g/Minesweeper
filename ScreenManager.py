@@ -28,16 +28,11 @@ class Screen:
         deadtxt2 = self.font.render(f'{"Press Space to restart":^27}', False, (0, 0, 0))
         txt = f'Score: {self.grid.opened.count(1)*100}'
         deadtxt3 = self.font.render(f'{txt:^27}', False, (0, 0, 0))
-        pygame.draw.rect(self.display, (19, 196, 181), self.deathbox)
+        pygame.draw.rect(self.display, (255, 255, 255, 150), self.deathbox)
         self.display.blit(deadtxt1, ((6*32), (5*32)+16))
         self.display.blit(deadtxt3, ((6*32)+16, (7*32)+16))
         self.display.blit(deadtxt2, ((6*32), (8*32)+16))
         pygame.display.flip()
-
-    def module(self, v):
-        if v >= 0:
-            return v
-        return -v
 
     def setOnScreen(self):
         if not self.dead:
