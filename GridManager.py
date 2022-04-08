@@ -2,6 +2,7 @@ from random import randint
 
 class Grid:
     def __init__(self, num) -> None:
+        self.num = num
         self.size = [20, 15]
         self.grid = [[0 for i in range(15)] for j in range(20)]
         self.bombs = [[randint(0, 19), randint(0, 14)] for i in range(num)]
@@ -17,6 +18,7 @@ class Grid:
                 self.numbers[k1][k2] = amnt.count(-1)
         self.opened = [[0 for i in range(15)] for j in range(20)]
         self.unclickable = []
+        self.score = 0
 
     def openTile(self, tile) -> None:
         try:
@@ -38,8 +40,21 @@ class Grid:
                 self.unclickable.remove(tile[:2])
             else:
                 self.unclickable.append(tile[:2])
+        self.updateScore()
+    
+    def updateScore(self):
+        self.score = 0
+        for i in self.unclickable:
+            if i in self.bombs:
+                self.score += 1
 
+    def clearAll(self):
+        self.opened = [[1 for i in range(15)] for j in range(20)]
+            
     def module(self, v):
         if v >= 0:
             return v
         return -v
+    
+    def getScore(self):
+        return self.score
