@@ -16,20 +16,29 @@ class Grid:
                     (k2+j) in range(self.size[1]) else 0 for i in [-1, 0, 1] for j in [-1, 0, 1]]
                 self.numbers[k1][k2] = amnt.count(-1)
         self.opened = [[0 for i in range(15)] for j in range(20)]
+        self.unclickable = []
 
     def openTile(self, tile) -> None:
         try:
-            self.opened[tile[0]][tile[1]] = 1
-            if self.grid[tile[0]][tile[1]] == -1:
-                return 0
-            if self.numbers[tile[0]][tile[1]] == 0:
-                free = [[tile[0]+i[0], tile[1]+i[1]] if (tile[0]+i[0] in range(self.size[0])) and (tile[1]+i[1] in range(self.size[1]))
-                    and (self.opened[tile[0]+i[0]][tile[1]+i[1]] == 0) else [] for i in [[0, 1], [1, 0], [0, -1], [-1, 0]]]
-                for i in free:
-                    self.openTile(i)
+            if not (tile[:2] in self.unclickable):
+                self.opened[tile[0]][tile[1]] = 1
+                if self.grid[tile[0]][tile[1]] == -1:
+                    return 0
+                if self.numbers[tile[0]][tile[1]] == 0:
+                    free = [[tile[0]+i, tile[1]+j] if (tile[0]+i in range(self.size[0])) and (tile[1]+j in range(self.size[1]))
+                        and (self.opened[tile[0]+i][tile[1]+j] == 0) else [] for i in [-1, 0, 1] for j in [-1, 0, 1]]
+                    for i in free:
+                        self.openTile(i)
         except:
             pass
     
+    def addUnclick(self, tile):
+        if self.opened[tile[0]][tile[1]] == 0:
+            if tile[:2] in self.unclickable:
+                self.unclickable.remove(tile[:2])
+            else:
+                self.unclickable.append(tile[:2])
+
     def module(self, v):
         if v >= 0:
             return v

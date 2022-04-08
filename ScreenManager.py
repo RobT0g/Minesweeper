@@ -7,6 +7,7 @@ class Screen:
         self.display = display
         self.board = pygame.image.load('Images/Frame.png')
         self.square = pygame.image.load('Images/Square.png')
+        self.unclick = pygame.image.load('Images/Unclickable.png')
         self.bomb = pygame.image.load('Images/Bomb.png')
         self.font = pygame.font.SysFont('Times New Roman', 32)
         self.numbers = [self.font.render(f'{i}', False, ((i*80)%255, (i*135)%255, (i*40)%255)) for i in range(1, 10)]
@@ -16,9 +17,11 @@ class Screen:
     
     def update(self):
         if p := Controller.getPos():
-            if self.grid.openTile(p) == 0:
+            if p[2] and self.grid.openTile(p) == 0:
                 self.death()
                 self.dead = True
+            if not p[2]:
+                self.grid.addUnclick(p)
 
     def death(self):
         deadtxt1 = self.font.render(f'{"Game end!":^27}', False, (0, 0, 0))
@@ -26,9 +29,9 @@ class Screen:
         txt = f'Score: {self.grid.opened.count(1)*100}'
         deadtxt3 = self.font.render(f'{txt:^27}', False, (0, 0, 0))
         pygame.draw.rect(self.display, (19, 196, 181), self.deathbox)
-        self.display.blit(deadtxt1, (80, (5*32)+16))
-        self.display.blit(deadtxt2, (80, (8*32)+16))
-        self.display.blit(deadtxt3, (80, (7*32)+16))
+        self.display.blit(deadtxt1, ((6*32), (5*32)+16))
+        self.display.blit(deadtxt3, ((6*32)+16, (7*32)+16))
+        self.display.blit(deadtxt2, ((6*32), (8*32)+16))
         pygame.display.flip()
 
     def module(self, v):
@@ -48,6 +51,8 @@ class Screen:
                         if self.grid.numbers[k][k1] != 0 and v1 != -1:
                             pos = self.getActualPos((k, k1))
                             self.display.blit(self.numbers[self.grid.numbers[k][k1]-1], (pos[0]+9, pos[1]-2))
+            for i in self.grid.unclickable:
+                self.display.blit(self.unclick, (self.getActualPos((i[0], i[1]))))
             pygame.display.flip()
     
     def getActualPos(self, pos):

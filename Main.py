@@ -20,7 +20,6 @@ while running:                      # looping
             screen.setOnScreen()
         if pygame.key.get_pressed()[pygame.K_SPACE] and screen.dead:
             screen.restart()
-            screen.update()
             screen.setOnScreen()
         if pygame.key.get_pressed()[pygame.K_ESCAPE] or e.type == QUIT:
             running = False
